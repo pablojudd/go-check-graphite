@@ -1,1 +1,5 @@
 .idea/
+lib/bin/
+lib/pkg/
+build/
+check-graphite
