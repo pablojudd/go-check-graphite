@@ -1,9 +1,10 @@
 package CheckGraphite
 
 import (
-	"GraphiteData"
 	"fmt"
 	"math"
+
+	"github.com/pablojudd/go-graphite-getmetrics"
 )
 
 // Alerts struct

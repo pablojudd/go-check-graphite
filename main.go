@@ -2,11 +2,11 @@ package main
 
 import (
 	"CheckGraphite"
-	"GraphiteData"
 	"fmt"
 	"os"
 
 	"github.com/jessevdk/go-flags"
+	"github.com/pablojudd/go-graphite-getmetrics"
 )
 
 var opts struct {

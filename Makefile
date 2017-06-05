@@ -13,9 +13,11 @@ lint: test-deps
 
 test-deps:
 	GOPATH=${PWD}/build go get github.com/golang/lint/golint
+	GOPATH=${PWD}/build go get github.com/pablojudd/go-graphite-getmetrics
 
 deps:
 	GOPATH=${PWD}/build go get github.com/jessevdk/go-flags
+	GOPATH=${PWD}/build go get github.com/pablojudd/go-graphite-getmetrics
 
 build: deps
 	export GOPATH=${PWD}/lib:${PWD}/build; \
@@ -23,6 +25,7 @@ build: deps
 
 clean:
 	rm -rf build
+	for i in `/bin/ls ./lib` ; do if [ $$i != "src" ] ; then rm -rfv ./lib/$$i ; fi ; done
 	rm -f ./${NAME}
 	go clean
 

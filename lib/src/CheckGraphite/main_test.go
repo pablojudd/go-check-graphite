@@ -1,51 +1,52 @@
 package CheckGraphite
 
 import (
-	g "GraphiteData"
 	"database/sql"
 	"reflect"
 	"testing"
+
+	"github.com/pablojudd/go-graphite-getmetrics"
 )
 
-var graphiteData = []g.GraphiteMetrics{
+var graphiteData = []GraphiteData.GraphiteMetrics{
 	{
 		Target: "collectd.graphite.load.load.longterm",
-		Datapoints: [][2]g.NullFloat64{
+		Datapoints: [][2]GraphiteData.NullFloat64{
 			{
-				g.NullFloat64{sql.NullFloat64{Float64: 0, Valid: false}},
-				g.NullFloat64{sql.NullFloat64{Float64: 1.49660502e+09, Valid: true}},
+				GraphiteData.NullFloat64{sql.NullFloat64{Float64: 0, Valid: false}},
+				GraphiteData.NullFloat64{sql.NullFloat64{Float64: 1.49660502e+09, Valid: true}},
 			},
 			{
-				g.NullFloat64{sql.NullFloat64{Float64: 0, Valid: false}},
-				g.NullFloat64{sql.NullFloat64{Float64: 1.49660508e+09, Valid: true}},
+				GraphiteData.NullFloat64{sql.NullFloat64{Float64: 0, Valid: false}},
+				GraphiteData.NullFloat64{sql.NullFloat64{Float64: 1.49660508e+09, Valid: true}},
 			},
 			{
-				g.NullFloat64{sql.NullFloat64{Float64: 0.26, Valid: true}},
-				g.NullFloat64{sql.NullFloat64{Float64: 1.49660586e+09, Valid: true}},
+				GraphiteData.NullFloat64{sql.NullFloat64{Float64: 0.26, Valid: true}},
+				GraphiteData.NullFloat64{sql.NullFloat64{Float64: 1.49660586e+09, Valid: true}},
 			},
 			{
-				g.NullFloat64{sql.NullFloat64{Float64: 0.3, Valid: true}},
-				g.NullFloat64{sql.NullFloat64{Float64: 1.49660592e+09, Valid: true}},
+				GraphiteData.NullFloat64{sql.NullFloat64{Float64: 0.3, Valid: true}},
+				GraphiteData.NullFloat64{sql.NullFloat64{Float64: 1.49660592e+09, Valid: true}},
 			},
 			{
-				g.NullFloat64{sql.NullFloat64{Float64: 0.7, Valid: true}},
-				g.NullFloat64{sql.NullFloat64{Float64: 1.49660598e+09, Valid: true}},
+				GraphiteData.NullFloat64{sql.NullFloat64{Float64: 0.7, Valid: true}},
+				GraphiteData.NullFloat64{sql.NullFloat64{Float64: 1.49660598e+09, Valid: true}},
 			},
 			{
-				g.NullFloat64{sql.NullFloat64{Float64: 0.5, Valid: true}},
-				g.NullFloat64{sql.NullFloat64{Float64: 1.49660604e+09, Valid: true}},
+				GraphiteData.NullFloat64{sql.NullFloat64{Float64: 0.5, Valid: true}},
+				GraphiteData.NullFloat64{sql.NullFloat64{Float64: 1.49660604e+09, Valid: true}},
 			},
 			{
-				g.NullFloat64{sql.NullFloat64{Float64: 0.3, Valid: true}},
-				g.NullFloat64{sql.NullFloat64{Float64: 1.4966061e+09, Valid: true}},
+				GraphiteData.NullFloat64{sql.NullFloat64{Float64: 0.3, Valid: true}},
+				GraphiteData.NullFloat64{sql.NullFloat64{Float64: 1.4966061e+09, Valid: true}},
 			},
 			{
-				g.NullFloat64{sql.NullFloat64{Float64: 0.25, Valid: true}},
-				g.NullFloat64{sql.NullFloat64{Float64: 1.49660616e+09, Valid: true}},
+				GraphiteData.NullFloat64{sql.NullFloat64{Float64: 0.25, Valid: true}},
+				GraphiteData.NullFloat64{sql.NullFloat64{Float64: 1.49660616e+09, Valid: true}},
 			},
 			{
-				g.NullFloat64{sql.NullFloat64{Float64: 0, Valid: false}},
-				g.NullFloat64{sql.NullFloat64{Float64: 1.49660622e+09, Valid: true}},
+				GraphiteData.NullFloat64{sql.NullFloat64{Float64: 0, Valid: false}},
+				GraphiteData.NullFloat64{sql.NullFloat64{Float64: 1.49660622e+09, Valid: true}},
 			},
 		},
 	},
