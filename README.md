@@ -1,4 +1,4 @@
-go-check-graphite
+nagios-check-graphite
 ==============
 
 A basic Graphite check for Nagios.
@@ -11,6 +11,7 @@ Application Options:
   -H, --host=HOST                          Graphite host url (required)
   -m, --metric=METRIC                      Graphite metric name (required)
   -z, --zero                               Convert 'None' values to 0.
+  -s, --scale=SCALE                        Set the desired numeric scale for the values. (default: 2)
   -d, --duration=SECONDS                   Number of minutes of data to aggregate. (default: 10)
   -f, --function=(min|max|avg|sum|last)    The aggregation function to apply. (default: last)
   -w, --warning=WARNING                    Warning threshold of aggregated value.

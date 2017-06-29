@@ -13,6 +13,7 @@ var opts struct {
 	Host       string  `short:"H" long:"host" description:"Graphite host url (required)" value-name:"HOST" required:"true"`
 	Metric     string  `short:"m" long:"metric" description:"Graphite metric name (required)" value-name:"METRIC" required:"true"`
 	NullIsZero bool    `short:"z" long:"zero" description:"Convert 'None' values to 0."`
+	Scale      int     `short:"s" long:"scale" description:"Set the desired numeric scale for the values." value-name:"SCALE" default:"2"`
 	Duration   int     `short:"d" long:"duration" description:"Number of minutes of data to aggregate." value-name:"SECONDS" default:"10"`
 	Function   string  `short:"f" long:"function" description:"The aggregation function to apply." value-name:"(min|max|avg|sum|last)" default:"last"`
 	Warning    float64 `short:"w" long:"warning" description:"Warning threshold of aggregated value." value-name:"WARNING"`
@@ -49,7 +50,7 @@ func main() {
 	}
 
 	// Aggregate Metrics
-	metrics, err := CheckGraphite.New(graphiteData[0], opts.NullIsZero, opts.Function)
+	metrics, err := CheckGraphite.New(graphiteData[0], opts.NullIsZero, opts.Scale, opts.Function)
 	if err != nil {
 		fmt.Printf("UNKNOWN: %s\n", err)
 		os.Exit(3)

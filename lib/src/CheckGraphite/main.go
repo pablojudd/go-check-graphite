@@ -12,11 +12,12 @@ type Alerts struct {
 	Target     string
 	Datapoints []float64
 	Function   string
+	Scale      int
 	Value      float64
 }
 
 // New function aggregates Graphite data for alerting
-func New(metrics GraphiteData.GraphiteMetrics, zero bool, fctn string) (m Alerts, err error) {
+func New(metrics GraphiteData.GraphiteMetrics, zero bool, scale int, fctn string) (m Alerts, err error) {
 
 	// Set Target
 	m.Target = metrics.Target
@@ -29,11 +30,11 @@ func New(metrics GraphiteData.GraphiteMetrics, zero bool, fctn string) (m Alerts
 				break
 			}
 			// Convert null to 0
-			m.Datapoints = append(m.Datapoints, RoundAsFloat64(d[0].Float64, 2))
+			m.Datapoints = append(m.Datapoints, roundAsFloat64(d[0].Float64, scale))
 		} else {
 			// Add only float64 values
 			if d[0].Valid {
-				m.Datapoints = append(m.Datapoints, RoundAsFloat64(d[0].Float64, 2))
+				m.Datapoints = append(m.Datapoints, roundAsFloat64(d[0].Float64, scale))
 			}
 		}
 	}
@@ -41,17 +42,20 @@ func New(metrics GraphiteData.GraphiteMetrics, zero bool, fctn string) (m Alerts
 	// Set Aggregation Function
 	m.Function = fctn
 
+	// Set Numeric Scale
+	m.Scale = scale
+
 	// Set Aggregated Value. Default is 'last'.
 	if fctn == "min" {
-		m.Value = m.Min()
+		m.Value = m.min()
 	} else if fctn == "max" {
-		m.Value = m.Max()
+		m.Value = m.max()
 	} else if fctn == "avg" {
-		m.Value = m.Avg()
+		m.Value = m.avg()
 	} else if fctn == "sum" {
-		m.Value = m.Sum()
+		m.Value = m.sum()
 	} else {
-		m.Value = m.Last()
+		m.Value = m.last()
 	}
 
 	// Return CheckGraphite data
@@ -98,55 +102,61 @@ func (m *Alerts) DoAlerts(warning float64, critical float64, invert bool) (msg s
 	return msg, exit
 }
 
-// Min Aggregation method
-func (m *Alerts) Min() (min float64) {
-	min = m.Datapoints[0]
-	for i := 1; i < len(m.Datapoints); i++ {
-		if m.Datapoints[i] < min {
-			min = m.Datapoints[i]
+// Min Aggregation
+func (m *Alerts) min() float64 {
+	min := m.Datapoints[0]
+	for _, v := range m.Datapoints[1:] {
+		if v < min {
+			min = v
 		}
 	}
-	return RoundAsFloat64(min, 2)
+	return roundAsFloat64(min, m.Scale)
 }
 
-// Max Aggregation method
-func (m *Alerts) Max() (max float64) {
-	for i := 0; i < len(m.Datapoints); i++ {
-		if m.Datapoints[i] > max {
-			max = m.Datapoints[i]
+// Max Aggregation
+func (m *Alerts) max() float64 {
+	max := m.Datapoints[0]
+	for _, v := range m.Datapoints[1:] {
+		if v > max {
+			max = v
 		}
 	}
-	return RoundAsFloat64(max, 2)
+	return roundAsFloat64(max, m.Scale)
 }
 
-// Avg Aggregation method
-func (m *Alerts) Avg() (avg float64) {
+// Avg Aggregation
+func (m *Alerts) avg() float64 {
+	avg := 0.0
 	for _, v := range m.Datapoints {
 		avg += v
 	}
-	return RoundAsFloat64(avg/float64(len(m.Datapoints)), 2)
+	avg = avg / float64(len(m.Datapoints))
+	return roundAsFloat64(avg, m.Scale)
 }
 
-// Sum Aggregation method
-func (m *Alerts) Sum() (sum float64) {
+// Sum Aggregation
+func (m *Alerts) sum() float64 {
+	sum := 0.0
 	for _, v := range m.Datapoints {
 		sum += v
 	}
-	return RoundAsFloat64(sum, 2)
+	return roundAsFloat64(sum, m.Scale)
 }
 
-// Last Aggregation method
-func (m *Alerts) Last() float64 {
-	return RoundAsFloat64(m.Datapoints[len(m.Datapoints)-1], 2)
+// Last Aggregation
+func (m *Alerts) last() float64 {
+	last := m.Datapoints[len(m.Datapoints)-1]
+	return roundAsFloat64(last, m.Scale)
 }
 
-// RoundAsInt function
-func RoundAsInt(num float64) int {
+// roundAsInt function
+func roundAsInt(num float64) int {
+	// Use math.Copysign to handle negative num values
 	return int(num + math.Copysign(0.5, num))
 }
 
-// RoundAsFloat64 function: Specify Float64 Precision
-func RoundAsFloat64(num float64, precision int) float64 {
-	output := math.Pow(10, float64(precision))
-	return float64(RoundAsInt(num*output)) / output
+// roundAsFloat64 function: Specify the numeric scale for a float64 value
+func roundAsFloat64(num float64, scale int) float64 {
+	output := math.Pow(10, float64(scale))
+	return float64(roundAsInt(num*output)) / output
 }

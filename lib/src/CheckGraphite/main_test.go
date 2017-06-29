@@ -61,11 +61,12 @@ func TestCheckGraphiteNew(t *testing.T) {
 		Target:     "collectd.graphite.load.load.longterm",
 		Datapoints: []float64{0.26, 0.3, 0.7, 0.5, 0.3, 0.25},
 		Function:   "last",
+		Scale:      2,
 		Value:      0.25,
 	}
 
 	// Perform Function
-	var value, _ = New(graphiteData[0], false, "last")
+	var value, _ = New(graphiteData[0], false, 2, "last")
 
 	// Test Result
 	var test = reflect.DeepEqual(value, expected)
@@ -84,11 +85,12 @@ func TestCheckGraphiteNewZeros(t *testing.T) {
 		Target:     "collectd.graphite.load.load.longterm",
 		Datapoints: []float64{0, 0, 0.26, 0.3, 0.7, 0.5, 0.3, 0.25},
 		Function:   "last",
+		Scale:      2,
 		Value:      0.25,
 	}
 
 	// Perform Function
-	var value, _ = New(graphiteData[0], true, "last")
+	var value, _ = New(graphiteData[0], true, 2, "last")
 
 	// Test Result
 	var test = reflect.DeepEqual(value, expected)
@@ -102,7 +104,7 @@ func TestDoAlerts(t *testing.T) {
 
 	println("Testing 'DoAlerts' method...")
 
-	var value, _ = New(graphiteData[0], false, "last")
+	var value, _ = New(graphiteData[0], false, 2, "last")
 
 	// OK: value less than Critical and Warning
 	_, expected := value.DoAlerts(0.3, 0.4, false)
@@ -131,7 +133,7 @@ func TestDoAlertsInvert(t *testing.T) {
 
 	println("Testing 'DoAlerts' method with inverted thresholds...")
 
-	var value, _ = New(graphiteData[0], false, "last")
+	var value, _ = New(graphiteData[0], false, 2, "last")
 
 	// OK: value greater than Critical and Warning
 	_, expected := value.DoAlerts(0.2, 0.1, true)
@@ -164,7 +166,7 @@ func TestMinAggregation(t *testing.T) {
 	var expected = 0.25
 
 	// Perform Function
-	var value, _ = New(graphiteData[0], false, "min")
+	var value, _ = New(graphiteData[0], false, 2, "min")
 
 	// Test Result
 	if value.Value != expected {
@@ -181,7 +183,7 @@ func TestMinAggregationZeros(t *testing.T) {
 	var expected = 0.0
 
 	// Perform Function
-	var value, _ = New(graphiteData[0], true, "min")
+	var value, _ = New(graphiteData[0], true, 2, "min")
 
 	// Test Result
 	if value.Value != expected {
@@ -198,7 +200,7 @@ func TestMaxAggregation(t *testing.T) {
 	var expected = 0.7
 
 	// Perform Function
-	var value, _ = New(graphiteData[0], false, "max")
+	var value, _ = New(graphiteData[0], false, 2, "max")
 
 	// Test Result
 	if value.Value != expected {
@@ -215,7 +217,7 @@ func TestMaxAggregationZeros(t *testing.T) {
 	var expected = 0.7
 
 	// Perform Function
-	var value, _ = New(graphiteData[0], true, "max")
+	var value, _ = New(graphiteData[0], true, 2, "max")
 
 	// Test Result
 	if value.Value != expected {
@@ -232,7 +234,7 @@ func TestAvgAggregation(t *testing.T) {
 	var expected = 0.39
 
 	// Perform Function
-	var value, _ = New(graphiteData[0], false, "avg")
+	var value, _ = New(graphiteData[0], false, 2, "avg")
 
 	// Test Result
 	if value.Value != expected {
@@ -249,7 +251,7 @@ func TestAvgAggregationZeros(t *testing.T) {
 	var expected = 0.29
 
 	// Perform Function
-	var value, _ = New(graphiteData[0], true, "avg")
+	var value, _ = New(graphiteData[0], true, 2, "avg")
 
 	// Test Result
 	if value.Value != expected {
@@ -266,7 +268,7 @@ func TestSumAggregation(t *testing.T) {
 	var expected = 2.31
 
 	// Perform Function
-	var value, _ = New(graphiteData[0], false, "sum")
+	var value, _ = New(graphiteData[0], false, 2, "sum")
 
 	// Test Result
 	if value.Value != expected {
@@ -283,7 +285,7 @@ func TestSumAggregationZeros(t *testing.T) {
 	var expected = 2.31
 
 	// Perform Function
-	var value, _ = New(graphiteData[0], true, "sum")
+	var value, _ = New(graphiteData[0], true, 2, "sum")
 
 	// Test Result
 	if value.Value != expected {
@@ -300,7 +302,7 @@ func TestLastAggregation(t *testing.T) {
 	var expected = 0.25
 
 	// Perform Function
-	var value, _ = New(graphiteData[0], false, "last")
+	var value, _ = New(graphiteData[0], false, 2, "last")
 
 	// Test Result
 	if value.Value != expected {
@@ -317,7 +319,7 @@ func TestLastAggregationZeros(t *testing.T) {
 	var expected = 0.25
 
 	// Perform Function
-	var value, _ = New(graphiteData[0], true, "last")
+	var value, _ = New(graphiteData[0], true, 2, "last")
 
 	// Test Result
 	if value.Value != expected {
